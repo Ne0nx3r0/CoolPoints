@@ -1,5 +1,6 @@
 package com.gmail.ne0nx3r0.coolpoints;
 
+import com.gmail.ne0nx3r0.coolpoints.commands.CoolPointsCommandExecutor;
 import com.gmail.ne0nx3r0.coolpoints.listeners.CoolPointsPlayerListener;
 import com.gmail.ne0nx3r0.coolpoints.points.PlayerProfileManager;
 import org.bukkit.plugin.Plugin;
@@ -19,7 +20,14 @@ public class CoolPoints extends JavaPlugin
         
         //register events
         getServer().getPluginManager().registerEvents(new CoolPointsPlayerListener(), this);
+        
+        //register commands
+        getCommand("cp").setExecutor(new CoolPointsCommandExecutor());
     }
-    
-    
+
+    @Override
+    public void onDisable()
+    {      
+        ppm.saveAllPlayerProfiles();
+    }
 }

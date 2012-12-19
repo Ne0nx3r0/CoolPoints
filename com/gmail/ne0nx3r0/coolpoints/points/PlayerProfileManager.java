@@ -136,4 +136,34 @@ public class PlayerProfileManager
             }
         }
     }
+
+    public void unloadProfile(String sPlayerName)
+    {
+        String sPlayerNameLower = sPlayerName.toLowerCase();
+        if(playerProfiles.containsKey(sPlayerNameLower))
+        {
+            saveProfile(sPlayerNameLower);
+            
+            playerProfiles.remove(sPlayerNameLower);
+        }
+    }
+
+    public void saveAllPlayerProfiles()
+    {
+        for(String sPlayerNameLower : playerProfiles.keySet())
+        {
+            saveProfile(sPlayerNameLower);
+        }
+    }
+
+    public int getCoolPoints(String sPlayerName)
+    {
+        String sPlayerNameToLower = sPlayerName.toLowerCase();
+        
+        if(playerProfiles.containsKey(sPlayerNameToLower))
+        {
+            return playerProfiles.get(sPlayerNameToLower).getPoints();
+        }
+        return -1;
+    }
 }
