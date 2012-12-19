@@ -82,8 +82,7 @@ public class PlayerProfileManager
             yml.set("name", cpp.getDisplayName());
             yml.set("points", cpp.getPoints());
             yml.set("firstJoined", cpp.getFirstJoined());
-            
-            
+            yml.set("notes", cpp.getNotes());
         }
     }
 }

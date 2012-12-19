@@ -43,4 +43,9 @@ public class CoolPointsPlayer
     {
         return this.firstJoined;
     }
+
+    HashMap<String,String> getNotes()
+    {
+        return this.notes;
+    }
 }
