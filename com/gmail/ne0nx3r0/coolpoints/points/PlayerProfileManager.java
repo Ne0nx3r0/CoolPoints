@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.libs.jline.internal.Log.Level;
 
 public class PlayerProfileManager
 {
