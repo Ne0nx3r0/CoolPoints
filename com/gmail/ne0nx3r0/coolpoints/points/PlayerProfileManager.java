@@ -3,7 +3,10 @@ package com.gmail.ne0nx3r0.coolpoints.points;
 import com.gmail.ne0nx3r0.coolpoints.CoolPoints;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -49,8 +52,35 @@ public class PlayerProfileManager
                 String sDisplayName = yml.getString("name");
                 int points = yml.getInt("cp");
                 long firstJoined = yml.getLong("firstJoined");
-
-                ///////
+                List<Map<String,Object>> tempNotes = (List<Map<String,Object>>) yml.get("notes");
+                
+                if(tempNotes.isEmpty())
+                {
+                    playerProfiles.put(sPlayerNameLower, new CoolPointsPlayer(
+                        sDisplayName,
+                        points,
+                        firstJoined
+                    ));
+                }
+                else
+                {
+                    ArrayList<PlayerNote> notes = new ArrayList<>();
+                    for(Map<String,Object> tempNote: tempNotes)
+                    {
+                        notes.add(new PlayerNote(
+                            (Long) tempNote.get("created"),
+                            (String) tempNote.get("author"),
+                            (String) tempNote.get("text")
+                        ));
+                    }
+                    
+                    playerProfiles.put(sPlayerNameLower, new CoolPointsPlayer(
+                        sDisplayName,
+                        points,
+                        firstJoined,
+                        notes
+                    ));
+                }
             }
         }
     }
@@ -78,11 +108,33 @@ public class PlayerProfileManager
             FileConfiguration yml = YamlConfiguration.loadConfiguration(ymlFile);
 
             CoolPointsPlayer cpp = playerProfiles.get(sPlayerNameLower);
+
+            ArrayList<HashMap<String,Object>> notes = new ArrayList<>();
+            
+            for(PlayerNote pn : cpp.getNotes())
+            {
+                HashMap<String, Object> tempNote = new HashMap<>();
+                
+                tempNote.put("created", pn.getCreated());
+                tempNote.put("author", pn.getAuthor());
+                tempNote.put("text", pn.getText());
+                
+                notes.add(tempNote);
+            }
             
             yml.set("name", cpp.getDisplayName());
             yml.set("points", cpp.getPoints());
             yml.set("firstJoined", cpp.getFirstJoined());
-            yml.set("notes", cpp.getNotes());
+            yml.set("notes", notes);
+            
+            try
+            {
+                yml.save(ymlFile);
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(PlayerProfileManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
         }
     }
 }

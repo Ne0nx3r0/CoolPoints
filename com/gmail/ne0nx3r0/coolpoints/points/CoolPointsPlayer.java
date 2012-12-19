@@ -1,6 +1,6 @@
 package com.gmail.ne0nx3r0.coolpoints.points;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class CoolPointsPlayer
 {
@@ -11,17 +11,17 @@ public class CoolPointsPlayer
     private int points;
     
     //author, note
-    private HashMap<String,String> notes;
+    private ArrayList<PlayerNote> notes;
     
     CoolPointsPlayer(String player, int points, long firstJoined)
     {
         this.displayName = player;
         this.points = points;
         this.firstJoined = firstJoined;
-        this.notes = new HashMap<>();
+        this.notes = new ArrayList<>();
     }
     
-    public CoolPointsPlayer(String player,int points,long firstJoined,HashMap<String,String> notes)
+    public CoolPointsPlayer(String player,int points,long firstJoined,ArrayList<PlayerNote> notes)
     {
         this.displayName = player;
         this.points = points;
@@ -44,7 +44,7 @@ public class CoolPointsPlayer
         return this.firstJoined;
     }
 
-    HashMap<String,String> getNotes()
+    ArrayList<PlayerNote> getNotes()
     {
         return this.notes;
     }

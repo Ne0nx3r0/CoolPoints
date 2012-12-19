@@ -5,7 +5,8 @@ import com.gmail.ne0nx3r0.coolpoints.points.PlayerProfileManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CoolPoints extends JavaPlugin{
+public class CoolPoints extends JavaPlugin
+{
     public static Plugin self;
     public static PlayerProfileManager ppm;
 
@@ -19,4 +20,6 @@ public class CoolPoints extends JavaPlugin{
         //register events
         getServer().getPluginManager().registerEvents(new CoolPointsPlayerListener(), this);
     }
+    
+    
 }
