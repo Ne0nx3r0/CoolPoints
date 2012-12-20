@@ -166,4 +166,20 @@ public class PlayerProfileManager
         }
         return -1;
     }
+
+    public CoolPointsPlayer getCoolPointsPlayer(String sPlayerName)
+    {
+        return playerProfiles.get(sPlayerName.toLowerCase());
+    }
+
+    public boolean playerGiftPlayer(String gifterName, String giftedName)
+    {
+        CoolPointsPlayer cpGifter = playerProfiles.get(this);
+        CoolPointsPlayer cpGifted = playerProfiles.get(this);
+        
+        if()
+        {
+            
+        }
+    }
 }

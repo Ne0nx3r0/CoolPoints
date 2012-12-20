@@ -13,7 +13,7 @@ public class CoolPointsPlayer
     //author, note
     private ArrayList<PlayerNote> notes;
     
-    CoolPointsPlayer(String player, int points, long firstJoined)
+    public CoolPointsPlayer(String player, int points, long firstJoined)
     {
         this.displayName = player;
         this.points = points;
