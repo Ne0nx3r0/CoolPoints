@@ -20,12 +20,11 @@ public class CoolPointsPlayerListener implements Listener
     @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerJoin(PlayerJoinEvent e)
     {
-        CoolPoints.ppm.loadProfile(e.getPlayer().getName());
+        CoolPoints.ppm.giveDailyWage(e.getPlayer().getName());
     }
     
     @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerQuit(PlayerQuitEvent e)
     {
-        CoolPoints.ppm.unloadProfile(e.getPlayer().getName());
     }
 }

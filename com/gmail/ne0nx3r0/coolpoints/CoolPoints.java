@@ -36,16 +36,13 @@ public class CoolPoints extends JavaPlugin
             getPluginLoader().disablePlugin(this);
         }
         
-        if(sqlite.checkTable("player"))
-        {
-            return;
-        }
-        else
+        if(!sqlite.checkTable("player"))
         {
             sqlite.query("CREATE TABLE player("
                 + "username VARCHAR(16) PRIMARY KEY,"
                 + "points INT,"
-                + "giftedToday BOOLEAN,"
+                + "giftedToday INT,"
+                + "receivedAllowanceToday INT,"
                 + "firstJoined INT"
             + ");");
             
@@ -70,8 +67,7 @@ public class CoolPoints extends JavaPlugin
 
     @Override
     public void onDisable()
-    {      
-        ppm.saveAllPlayerProfiles();
+    {
         sqlite.close();
     }
 }
