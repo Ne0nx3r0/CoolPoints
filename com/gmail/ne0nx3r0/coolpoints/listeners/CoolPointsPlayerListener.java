@@ -6,7 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 public class CoolPointsPlayerListener implements Listener
 {
@@ -20,11 +19,9 @@ public class CoolPointsPlayerListener implements Listener
     @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerJoin(PlayerJoinEvent e)
     {
-        CoolPoints.ppm.giveDailyWage(e.getPlayer().getName());
-    }
-    
-    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
-    public void onPlayerQuit(PlayerQuitEvent e)
-    {
+        if(CoolPoints.ppm.giveDailyWage(e.getPlayer().getName()))
+        {
+            e.getPlayer().sendMessage("You have earned a cool point for logging in today!");
+        }
     }
 }

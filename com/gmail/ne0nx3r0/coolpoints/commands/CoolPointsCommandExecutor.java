@@ -21,6 +21,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
 
         switch(args[0])
         {
+            case "createProfileWith":
+                return this.createProfileWith(cs, args);
             case "gift":
                 return this.gift(cs, args);
             case "give":
@@ -65,7 +67,7 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         int iCP = CoolPoints.ppm.getCoolPoints(args[0]);
         if(iCP > -1)
         {
-            cs.sendMessage(args[0] + " has "+iCP+"CP");
+            cs.sendMessage(ChatColor.GOLD+args[0] + " has "+ChatColor.WHITE+iCP+ChatColor.GOLD+"CP");
         }
         else
         {
@@ -80,6 +82,12 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         if(!cs.hasPermission("coolpoints.gift"))
         {
             cs.sendMessage("You don't have permisson to use /cp gift");
+            return true;
+        }
+        
+        if(!(cs instanceof Player))
+        {
+            cs.sendMessage("This command not allowed from the console.");
             return true;
         }
         
@@ -237,6 +245,13 @@ public class CoolPointsCommandExecutor implements CommandExecutor
 
     private boolean top(CommandSender cs, String[] args)
     {
+        if(!cs.hasPermission("coolpoints.top"))
+        {
+            cs.sendMessage(ChatColor.RED+"You do not have permission to see the top users.");
+            
+            return true;
+        }
+        
         int iTopAmount = 10;
         
         if(args.length == 2)
@@ -253,20 +268,42 @@ public class CoolPointsCommandExecutor implements CommandExecutor
             }
         }
         
-        HashMap<String,Integer> topPlayers = CoolPoints.ppm.getTopPlayers(iTopAmount);
-        
-        cs.sendMessage("------------------------------------");
-        
-        cs.sendMessage("Top "+iTopAmount+" players");
-        
-        cs.sendMessage("------------------------------------");
-        
-        for(String sPlayerName : topPlayers.keySet())
+        if(iTopAmount > 50)
         {
-            cs.sendMessage(sPlayerName + ":" + topPlayers.get(sPlayerName));
+            iTopAmount = 50;
+        }
+
+        cs.sendMessage("--------------------------");
+        
+        cs.sendMessage(ChatColor.GOLD+"    Top "+iTopAmount+" players");
+        
+        cs.sendMessage("--------------------------");
+        
+        for(String sPacked : CoolPoints.ppm.getTopPlayers(iTopAmount))
+        {
+            String[] sValues = sPacked.split(",");
+            
+            cs.sendMessage("    "+ChatColor.BLUE+sValues[0] + ChatColor.WHITE+" : " + ChatColor.GREEN+sValues[1]);
         }
         
-        cs.sendMessage("------------------------------------");
+        cs.sendMessage("--------------------------");
+        
+        return true;
+    }
+
+    private boolean createProfileWith(CommandSender cs, String[] args)
+    {
+        if(cs instanceof Player)
+        {
+            cs.sendMessage(ChatColor.RED+"Console-only command.");
+        }
+        else if(args.length == 3 && !args[2].equals("0"))
+        {
+            System.out.println("Creating profile for "+args[1]+" with "+args[2]+" points.");
+            CoolPoints.ppm.createProfile(args[1]);
+            
+            CoolPoints.ppm.giveCoolPoints(args[1], Integer.parseInt(args[2]));
+        }
         
         return true;
     }

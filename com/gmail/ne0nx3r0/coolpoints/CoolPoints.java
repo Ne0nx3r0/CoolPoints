@@ -4,6 +4,7 @@ import com.gmail.ne0nx3r0.coolpoints.commands.CoolPointsCommandExecutor;
 import com.gmail.ne0nx3r0.coolpoints.listeners.CoolPointsPlayerListener;
 import com.gmail.ne0nx3r0.coolpoints.points.PlayerProfileManager;
 import lib.PatPeter.SQLibrary.SQLite;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -63,6 +64,19 @@ public class CoolPoints extends JavaPlugin
         
         //register commands
         getCommand("cp").setExecutor(new CoolPointsCommandExecutor());
+        
+        //Setup daily point reset thingy
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(self,new Runnable()
+        {
+            @Override 
+            public void run()
+            {
+                CoolPoints.ppm.dailyReset();
+                
+                Bukkit.broadcastMessage("[SERVER] Resetting CoolPoint daily stats!");
+            }
+        }, 
+        20*60*60,20*60*60*24);
     }
 
     @Override
