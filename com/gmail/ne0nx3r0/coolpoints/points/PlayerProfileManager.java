@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
@@ -59,6 +58,8 @@ public class PlayerProfileManager
 
     public int giveCoolPoints(String sPlayerName, int iAmount)
     {
+        System.out.println("CP: Giving "+sPlayerName +" "+iAmount);
+        
         try
         {
             PreparedStatement statement = CoolPoints.sqlite.prepare(""
@@ -142,6 +143,8 @@ public class PlayerProfileManager
 
     public boolean playerGiftPlayer(String takeFrom, String giveTo)
     {
+        System.out.println("CP: "+takeFrom+" gifted "+giveTo);
+        
         if(this.getCoolPoints(takeFrom) > 0)
         {
             try
@@ -221,9 +224,10 @@ public class PlayerProfileManager
             {
                 if(result.getInt("receivedAllowanceToday") == 0)
                 {
+                    System.out.println("CP: Giving "+sPlayerName +" their daily point");
                     PreparedStatement statement2 = CoolPoints.sqlite.prepare(""
                         + "UPDATE player "
-                        + "SET points = points+1 "
+                        + "SET points = points+1,receivedAllowanceToday=1 "
                         + "WHERE username=?");
 
                     statement2.setString(1, sPlayerName.toLowerCase());
@@ -261,7 +265,7 @@ public class PlayerProfileManager
             PreparedStatement statement = CoolPoints.sqlite.prepare(""
                 + "SELECT username,points "
                 + "FROM player "
-                + "ORDER BY points DESC LIMIT "+iTopAmount+";");
+                + "ORDER BY points DESC,username ASC LIMIT "+iTopAmount+";");
             
             ResultSet result = statement.executeQuery();
             
@@ -287,6 +291,8 @@ public class PlayerProfileManager
 
     public void dailyReset()
     {
+        CoolPoints.self.getLogger().log(Level.INFO, "Resetting cool points!");
+                    
         try
         {
             PreparedStatement updatePoints = CoolPoints.sqlite.prepare("UPDATE player SET giftedToday = 0,receivedAllowanceToday = 0;");  
@@ -297,5 +303,35 @@ public class PlayerProfileManager
             Bukkit.broadcastMessage("[SERVER] I need an adult!!! I need an admin! Something Happened!");
             Logger.getLogger(PlayerProfileManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public int getRank(String sPlayerName)
+    {
+        try
+        {
+            PreparedStatement statement = CoolPoints.sqlite.prepare(""
+                + "SELECT COUNT(username) as rank "
+                + "FROM player "
+                + "WHERE points > " + this.getCoolPoints(sPlayerName)+";");
+            
+            ResultSet result = statement.executeQuery();
+
+            if(result.next())
+            {
+                int iRank = result.getInt("rank")+1;
+                
+                result.close();
+                
+                return iRank;
+            }
+            
+            result.close();
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(PlayerProfileManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return -1;
     }
 }

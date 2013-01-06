@@ -1,7 +1,6 @@
 package com.gmail.ne0nx3r0.coolpoints.commands;
 
 import com.gmail.ne0nx3r0.coolpoints.CoolPoints;
-import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -23,6 +22,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         {
             case "createProfileWith":
                 return this.createProfileWith(cs, args);
+            case "reset":
+                return this.resetPoints(cs, args);
             case "gift":
                 return this.gift(cs, args);
             case "give":
@@ -34,6 +35,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
                 return this.take(cs, args);
             case "top":
                 return this.top(cs, args);
+            case "rank":
+                return this.rank(cs, args);
         }
         
         if(args.length == 1)
@@ -48,13 +51,16 @@ public class CoolPointsCommandExecutor implements CommandExecutor
     {
         cs.sendMessage("Usage:");
         cs.sendMessage("/cp <player> - Get player CP");
-        cs.sendMessage("/cp gift <player> - give a player a CP");
+        cs.sendMessage("/cp gift <player> - give a player one of your CP");
         cs.sendMessage("/cp top [amount] - Show top players");
+        cs.sendMessage("/cp rank <player> - Show player rank");
         
-        if(cs.hasPermission("coolpoints.give"))
+        if(cs.hasPermission("coolpoints.manage"))
         {
             cs.sendMessage("/cp give <player> <amount> - Give CP");
             cs.sendMessage("/cp take <player> <amount> - Take away CP");
+            cs.sendMessage("/cp reset - Reset daily points");
+            cs.sendMessage("/cp createProfileWith <player> <amount> - Create a profile artificially");
         }
         
         cs.sendMessage(ChatColor.GOLD+"You have "+CoolPoints.ppm.getCoolPoints(cs.getName())+"CP");
@@ -67,7 +73,7 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         int iCP = CoolPoints.ppm.getCoolPoints(args[0]);
         if(iCP > -1)
         {
-            cs.sendMessage(ChatColor.GOLD+args[0] + " has "+ChatColor.WHITE+iCP+ChatColor.GOLD+"CP");
+            cs.sendMessage(ChatColor.GOLD+args[0] + " has "+iCP+"CP");
         }
         else
         {
@@ -126,6 +132,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
                     {
                         Bukkit.getPlayer(args[1]).sendMessage(cs.getName()+" gifted you a cool point! ("+CoolPoints.ppm.getCoolPoints(args[1]) +"CP total)");
                     }
+                    
+                    Bukkit.broadcast(ChatColor.GOLD+cs.getName() + " gifted a CP to "+args[1], "coolpoints.alerts");
                 }
                 else
                 {
@@ -185,6 +193,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
                 Bukkit.getPlayer(args[1]).sendMessage(cs.getName()+" gave you "+iAmount+"CP! "
                         + "("+iGiveToTotal+" total CP)");
             }
+            
+            Bukkit.broadcast(ChatColor.GOLD+cs.getName() + " gave "+iAmount+"CP to "+args[1], "coolpoints.alerts");
         }
         else
         {
@@ -234,6 +244,8 @@ public class CoolPointsCommandExecutor implements CommandExecutor
                 Bukkit.getPlayer(args[1]).sendMessage(ChatColor.RED+cs.getName()+" took "+iAmount+"CP! "
                         + " from you! ("+iTakeFromTotal+" total CP)");
             }
+            
+            Bukkit.broadcast(ChatColor.GOLD+cs.getName() + " took "+iAmount+"CP from "+args[1], "coolpoints.alerts");
         }
         else
         {
@@ -279,14 +291,39 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         
         cs.sendMessage("--------------------------");
         
+        int iRank = 0;
         for(String sPacked : CoolPoints.ppm.getTopPlayers(iTopAmount))
         {
+            iRank++;
+            
             String[] sValues = sPacked.split(",");
             
-            cs.sendMessage("    "+ChatColor.BLUE+sValues[0] + ChatColor.WHITE+" : " + ChatColor.GREEN+sValues[1]);
+            cs.sendMessage("    #"+iRank+" "+ChatColor.BLUE+sValues[0] + ChatColor.WHITE+" : " + ChatColor.GREEN+sValues[1]);
         }
         
         cs.sendMessage("--------------------------");
+        
+        return true;
+    }
+
+    private boolean rank(CommandSender cs, String[] args)
+    {
+        if(!cs.hasPermission("coolpoints.rank"))
+        {
+            cs.sendMessage(ChatColor.RED+"You do not have permission to use this command.");
+        }
+        else if(args.length == 1)
+        {
+            cs.sendMessage(ChatColor.GOLD+"You are ranked #"+CoolPoints.ppm.getRank(cs.getName()));
+        }
+        else if(CoolPoints.ppm.getCoolPoints(args[1]) > -1)
+        {
+            cs.sendMessage(ChatColor.GOLD+args[1]+ " is ranked #"+CoolPoints.ppm.getRank(args[1]));
+        }
+        else
+        {
+            cs.sendMessage(ChatColor.RED+args[1]+" not found");
+        }
         
         return true;
     }
@@ -300,9 +337,24 @@ public class CoolPointsCommandExecutor implements CommandExecutor
         else if(args.length == 3 && !args[2].equals("0"))
         {
             System.out.println("Creating profile for "+args[1]+" with "+args[2]+" points.");
+            
             CoolPoints.ppm.createProfile(args[1]);
             
             CoolPoints.ppm.giveCoolPoints(args[1], Integer.parseInt(args[2]));
+        }
+        
+        return true;
+    }
+
+    private boolean resetPoints(CommandSender cs, String[] args)
+    {
+        if(cs instanceof Player)
+        {
+            cs.sendMessage(ChatColor.RED+"Console-only command.");
+        }
+        else
+        {
+            CoolPoints.ppm.dailyReset();
         }
         
         return true;

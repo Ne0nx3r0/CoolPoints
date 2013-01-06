@@ -3,6 +3,8 @@ package com.gmail.ne0nx3r0.coolpoints;
 import com.gmail.ne0nx3r0.coolpoints.commands.CoolPointsCommandExecutor;
 import com.gmail.ne0nx3r0.coolpoints.listeners.CoolPointsPlayerListener;
 import com.gmail.ne0nx3r0.coolpoints.points.PlayerProfileManager;
+import java.util.Calendar;
+import java.util.logging.Level;
 import lib.PatPeter.SQLibrary.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -70,13 +72,16 @@ public class CoolPoints extends JavaPlugin
         {
             @Override 
             public void run()
-            {
-                CoolPoints.ppm.dailyReset();
-                
-                Bukkit.broadcastMessage("[SERVER] Resetting CoolPoint daily stats!");
+            {      
+                if(Calendar.HOUR_OF_DAY == 0)
+                {
+                    Bukkit.broadcastMessage("[SERVER] Resetting CoolPoint daily stats!");
+
+                    CoolPoints.ppm.dailyReset();
+                }
             }
         }, 
-        20*60*60,20*60*60*24);
+        20*60*60,20*60*60);
     }
 
     @Override
