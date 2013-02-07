@@ -1,8 +1,19 @@
 name: CoolPoints
 main: com.gmail.ne0nx3r0.coolpoints.CoolPoints
-version: '0.3'
+version: '1.0'
 database: false
-description: Made for Birdie83
+description: A basic social points system
 commands:
   cp: 
-    description: Fish
+    description: CP-related commands
+permissions:
+    coolpoints.earn:
+      description: Allows player to earn daily point
+    coolpoints.gift:
+      description: Allows player to gift their daily point
+    coolpoints.top:
+      description: Allows player to see top ranked players
+    coolpoints.rank:
+      description: Allows player to see ranks of players
+    coolpoints.manage:
+      description: Allows management of cool points
