@@ -88,8 +88,6 @@ public class CoolPoints extends JavaPlugin
             @Override 
             public void run()
             {      
-                System.out.println("Hour was:"+Calendar.getInstance().HOUR_OF_DAY);
-                
                 if(Calendar.getInstance().HOUR_OF_DAY == 0)
                 {
                     Bukkit.broadcastMessage("[SERVER] Resetting CoolPoint daily stats!");

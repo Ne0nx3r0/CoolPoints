@@ -63,7 +63,10 @@ public class CoolPointsCommandExecutor implements CommandExecutor
             cs.sendMessage("/cp createProfileWith <player> <amount> - Create a profile artificially");
         }
         
-        cs.sendMessage(ChatColor.GOLD+"You have "+CoolPoints.ppm.getCoolPoints(cs.getName())+"CP");
+        if(cs instanceof Player)
+        {
+            cs.sendMessage(ChatColor.GOLD+"You have "+CoolPoints.ppm.getCoolPoints(cs.getName())+"CP");
+        }
             
         return true;
     }
