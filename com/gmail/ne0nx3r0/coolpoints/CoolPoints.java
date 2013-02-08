@@ -64,13 +64,13 @@ public class CoolPoints extends JavaPlugin
                 + "receivedAllowanceToday INT,"
                 + "firstJoined INT"
             + ");");
-            
+            /*
             sqlite.query("CREATE TABLE points_given("
-                + "created INT PRIMARY KEY,"
-                + "fromName VARCHAR(16) PRIMARY KEY,"
-                + "toName VARCHAR(16) PRIMARY KEY,"
+                + "created INT,"
+                + "fromName VARCHAR(16),"
+                + "toName VARCHAR(16),"
                 + "amount INT"
-            + ");");
+            + ");");*/
 
             getLogger().info("Cool Points tables created.");
         }
