@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.logging.Level;
 import lib.PatPeter.SQLibrary.SQLite;
@@ -87,8 +88,8 @@ public class CoolPoints extends JavaPlugin
         {
             @Override 
             public void run()
-            {      
-                if(Calendar.getInstance().HOUR_OF_DAY == 0)
+            {
+                if(Calendar.getInstance().getTime().getHours() == 0)
                 {
                     Bukkit.broadcastMessage("[SERVER] Resetting CoolPoint daily stats!");
 
@@ -97,7 +98,6 @@ public class CoolPoints extends JavaPlugin
             }
         }, 
         20*60*60,20*60*60);
-        
         
         if(getConfig().getBoolean("update-notifications"))
         {

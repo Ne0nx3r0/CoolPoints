@@ -18,13 +18,13 @@ public class CoolPointsPlayerListener implements Listener
     
     @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onPlayerJoin(PlayerJoinEvent e)
-    {
+    {                    
         if(e.getPlayer().hasPermission("coolpoints.earn")
         && CoolPoints.ppm.giveDailyWage(e.getPlayer().getName()))
         {
             e.getPlayer().sendMessage("You have earned a cool point for logging in today!");
         }
-        
+
         if(plugin.UPDATE_AVAILABLE && e.getPlayer().hasPermission("coolpoints.manage"))
         {
             e.getPlayer().sendMessage(ChatColor.RED+"An update is available:"
